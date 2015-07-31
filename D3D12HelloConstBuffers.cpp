@@ -148,7 +148,7 @@ void D3D12HelloConstBuffers::LoadAssets()
 		CD3DX12_ROOT_PARAMETER rootParameters[1];
 
 		ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
-		rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_VERTEX);
+		rootParameters[0].InitAsDescriptorTable(1, &ranges[0], D3D12_SHADER_VISIBILITY_ALL);
 
 		// Allow input layout and deny uneccessary access to certain pipeline stages.
 		D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
@@ -304,14 +304,7 @@ void D3D12HelloConstBuffers::LoadAssets()
 // Update frame-based values.
 void D3D12HelloConstBuffers::OnUpdate()
 {
-	const float translationSpeed = 0.005f;
-	const float offsetBounds = 1.25f;
-
-	m_constantBufferData.offset.x += translationSpeed;
-	if (m_constantBufferData.offset.x > offsetBounds)
-	{
-		m_constantBufferData.offset.x = -offsetBounds;
-	}
+	m_constantBufferData.offset.x = (float)::clock() / CLOCKS_PER_SEC;
 	memcpy(m_pCbvDataBegin, &m_constantBufferData, sizeof(m_constantBufferData));
 }
 

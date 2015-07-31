@@ -86,10 +86,10 @@ float3 GuessNormal(float3 p)
 		DE(p + float3(0.0, 0.0, d)) - DE(p + float3(0.0, 0.0, -d))));
 }
 
-float4 Scene(float2 pos, float4 params)
+float4 Scene(float2 pos)
 {
 	float2 _ScreenParams = float2(1280.0, 720.0);
-	float time = params.x;
+	float time = offset.x;
 	float aspect = _ScreenParams.x / _ScreenParams.y;
 	float2 screen_pos = (pos + float2(1.0, 1.0)) * 0.5 * _ScreenParams.xy;
 	pos.x *= aspect;
@@ -161,7 +161,6 @@ struct PSInput
 {
 	float4 position : SV_POSITION;
 	float4 screen_position : TEXCOORD0;
-	float4 params : TEXCOORD1;
 };
 
 PSInput VSMain(float4 position : POSITION, float4 color : COLOR)
@@ -169,7 +168,6 @@ PSInput VSMain(float4 position : POSITION, float4 color : COLOR)
 	PSInput result;
 
 	result.position = result.screen_position = position;
-	result.params = offset;
 
 	return result;
 }
@@ -178,5 +176,5 @@ float4 PSMain(PSInput input) : SV_TARGET
 {
 	float2 spos = input.screen_position.xy;
 	//return float4(spos,0,0);
-	return Scene(spos, input.params);
+	return Scene(spos);
 }
